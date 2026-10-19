@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HandMocap</title>
+<link rel="stylesheet" href="style.css">
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.186.1/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.186.1/examples/jsm/"
+} }
+</script>
+</head>
+<body>
+<main id="app">
+  <div id="view">
+    <canvas id="gl" aria-label="3D rig preview (drag to orbit, scroll to zoom)"></canvas>
+    <div id="cam" hidden>
+      <video id="video" muted playsinline></video>
+      <canvas id="overlay"></canvas>
+    </div>
+    <div id="diag" aria-live="off"></div>
+  </div>
+
+  <aside id="panel">
+    <p id="status" role="status" aria-live="polite">Loading…</p>
+
+    <section aria-labelledby="h-camera">
+      <h2 id="h-camera">1. Camera</h2>
+      <p>
+        <button id="camStart" type="button">Start camera</button>
+        <button id="camStop" type="button" disabled>Stop camera</button>
+      </p>
+      <p><label>Camera <select id="camSelect" disabled><option value="">(start camera first)</option></select></label></p>
+      <p>
+        <label><input type="checkbox" id="mirror" checked> Mirror preview</label>
+        <label><input type="checkbox" id="showLandmarks" checked> Landmark overlay</label>
+      </p>
+      <p><label>View <select id="viewPreset">
+        <option value="performer">from performer</option>
+        <option value="camera">from webcam</option>
+      </select></label> <button id="viewReset" type="button">Reset view</button></p>
+    </section>
+
+    <section aria-labelledby="h-rig">
+      <h2 id="h-rig">2. Rig</h2>
+      <p id="rigName">Rig: built-in hands</p>
+      <p>
+        <button id="rigBuiltin" type="button">Built-in hands</button>
+        <label class="file">Load GLB/glTF… <input type="file" id="rigFile" accept=".glb,.gltf,.bin,.png,.jpg,.jpeg,.webp,.ktx2" multiple></label>
+      </p>
+      <p>Validation rigs: <button id="rigB" type="button">B (Mixamo-style)</button> <button id="rigC" type="button">C (Unreal-style)</button></p>
+      <details id="mapDetails">
+        <summary>Map bones</summary>
+        <p>
+          <button id="mapSuggest" type="button">Suggest</button>
+          <button id="mapApply" type="button">Apply mapping</button>
+          <button id="mapClear" type="button">Clear</button>
+        </p>
+        <div id="mapTableWrap"></div>
+        <details>
+          <summary>Per-bone axis corrections (degrees, X Y Z)</summary>
+          <p class="note">Extra rotation of the inferred anatomical frame. Use only when a finger bends the wrong way or rolls; "ambiguous" rows above are candidates.</p>
+          <div id="axisWrap"></div>
+        </details>
+        <details>
+          <summary>Bone hierarchy</summary>
+          <pre id="hierarchy"></pre>
+        </details>
+      </details>
+      <p id="mapReport" class="note"></p>
+      <p>
+        <button id="profileSave" type="button">Save rig profile</button>
+        <label class="file">Load rig profile… <input type="file" id="profileFile" accept=".json,application/json"></label>
+      </p>
+    </section>
+
+    <section aria-labelledby="h-cal">
+      <h2 id="h-cal">3. Calibrate</h2>
+      <div id="calPose">
+        <svg viewBox="0 0 120 110" width="96" height="88" role="img" aria-label="Neutral pose: open hand, palm toward the camera, fingers up and together">
+          <path d="M40 104 L40 70 Q30 62 18 48 Q14 42 20 40 Q26 39 34 50 L40 56 L40 22 Q40 15 46 15 Q51 15 51 22 L51 48 L52 12 Q52 5 58 5 Q64 5 64 12 L64 48 L66 15 Q66 8 72 8 Q78 8 78 15 L77 50 L80 26 Q80 20 86 20 Q91 21 90 27 L87 66 Q84 86 76 104 Z" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
+        </svg>
+        <ol>
+          <li>Rig and mapping as above.</li>
+          <li>Hands seen: <span id="calHands">none</span></li>
+          <li>Open hands, palms to the camera, fingers up, about 50 cm away. Hold still.</li>
+        </ol>
+      </div>
+      <p>
+        <button id="calStart" type="button" disabled>Calibrate</button>
+        <button id="calClear" type="button">Clear calibration</button>
+      </p>
+      <p id="calResult" class="note">Not calibrated (neutral = flat open hand).</p>
+    </section>
+
+    <section aria-labelledby="h-track">
+      <h2 id="h-track">Tracking</h2>
+      <p><label>Hands <select id="hands">
+        <option value="both">both</option><option value="left">left only</option><option value="right">right only</option>
+      </select></label></p>
+      <p><label>Smoothing <input type="range" id="smoothing" min="0" max="1" step="0.05" value="0.35"></label> <output id="smoothingOut">0.35</output></p>
+      <details>
+        <summary>Advanced</summary>
+        <p><label>Root <select id="rootPolicy">
+          <option value="fixed">fixed (wrist rotation + fingers)</option>
+          <option value="approx-screen">approximate screen-space position</option>
+        </select></label></p>
+        <p><label>Wrist <select id="wristMode">
+          <option value="absolute">absolute (match camera-space orientation)</option>
+          <option value="relative">relative to calibration pose</option>
+        </select></label></p>
+        <p><label>On tracking loss hold <input type="number" id="holdMs" min="0" max="2000" step="50" value="300"> ms, then blend <input type="number" id="blendMs" min="0" max="3000" step="50" value="500"> ms to
+          <select id="lossPose"><option value="relaxed">relaxed hand</option><option value="rest">rest pose</option></select></label></p>
+        <p><label>Handedness labels <select id="labelConvention">
+          <option value="reported">use as reported</option>
+          <option value="swap">swap (labels assume mirrored input)</option>
+        </select></label></p>
+        <p><label>Thumb twist coupling <input type="number" id="thumbTwist" min="0" max="60" step="5" value="25"> °</label></p>
+        <p><label><input type="checkbox" id="recordRaw"> Record raw landmarks (diagnostic)</label></p>
+      </details>
+    </section>
+
+    <section aria-labelledby="h-export">
+      <h2 id="h-export">5. Export</h2>
+      <p><label>Frame rate <select id="exportFps">
+        <option>24</option><option>25</option><option selected>30</option><option>60</option>
+      </select></label></p>
+      <p>
+        <button id="exportGlb" type="button" disabled>Rig animation (.glb)</button>
+        <button id="exportJson" type="button" disabled>Canonical motion (.json)</button>
+        <button id="exportRaw" type="button" disabled>Raw landmarks (.json)</button>
+      </p>
+      <p id="exportResult" class="note">GLB = current rig + baked skeletal animation (glTF 2.0). JSON = HandMocap schema, not a standard mocap format.</p>
+    </section>
+  </aside>
+
+  <div id="timeline" aria-labelledby="h-rec">
+    <h2 id="h-rec">4. Record</h2>
+    <button id="recBtn" type="button" disabled>Record</button>
+    <button id="playBtn" type="button" disabled>Play</button>
+    <button id="liveBtn" type="button" disabled>Live</button>
+    <input type="range" id="scrub" min="0" max="1" step="0.001" value="0" disabled aria-label="Timeline">
+    <output id="timeOut">0.00 / 0.00 s</output>
+    <label class="file">Load recording… <input type="file" id="recFile" accept=".json,application/json"></label>
+    <button id="recExample" type="button">Example recording</button>
+  </div>
+</main>
+<script>
+  // Classic script so this still runs where ES modules cannot load (file://).
+  if (location.protocol === 'file:') {
+    document.getElementById('status').textContent = 'Opened from file:// — browsers block module loading and camera access here. Serve this folder over http://localhost or https (see README), e.g. "python3 -m http.server" in this folder.';
+  }
+</script>
+<script type="module" src="src/main.js"></script>
+</body>
+</html>

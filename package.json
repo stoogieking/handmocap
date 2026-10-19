@@ -1,0 +1,19 @@
+{
+  "name": "handmocap",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Browser webcam hand motion capture: MediaPipe Hand Landmarker -> canonical hand pose -> rig retargeting -> recording -> GLB/JSON export. No build step; npm is only needed for tests and tools.",
+  "scripts": {
+    "serve": "python3 -m http.server 8080",
+    "test": "node tests/run.mjs",
+    "bench": "node tests/bench.mjs",
+    "test:browser": "python3 tests/browser_test.py --help",
+    "make-rigs": "node tools/make-test-rigs.mjs",
+    "make-example": "node tools/make-example.mjs",
+    "vendor": "node tools/vendor.mjs"
+  },
+  "devDependencies": {
+    "three": "0.186.1"
+  }
+}

@@ -1,0 +1,299 @@
+{
+ "schema": "handmocap.rig-profile",
+ "version": 1,
+ "createdAt": "2026-10-08T19:50:30.344Z",
+ "rig": {
+  "name": "rig-c-unreal-style.glb",
+  "kind": "file",
+  "fileName": "rig-c-unreal-style.glb",
+  "nodeCount": 54,
+  "nodeNameHash": "17588377"
+ },
+ "mapping": {
+  "left": {
+   "wrist": "hand_l",
+   "thumb1": "thumb_01_l",
+   "thumb2": "thumb_02_l",
+   "thumb3": "thumb_03_l",
+   "index1": "index_01_l",
+   "index2": "index_02_l",
+   "index3": "index_03_l",
+   "middle1": "middle_01_l",
+   "middle2": "middle_02_l",
+   "middle3": "middle_03_l",
+   "ring1": "ring_01_l",
+   "ring2": "ring_02_l",
+   "ring3": "ring_03_l",
+   "pinky1": "pinky_01_l",
+   "pinky2": "pinky_02_l"
+  },
+  "right": {
+   "wrist": "hand_r",
+   "thumb1": "thumb_01_r",
+   "thumb2": "thumb_02_r",
+   "thumb3": "thumb_03_r",
+   "index1": "index_01_r",
+   "index2": "index_02_r",
+   "index3": "index_03_r",
+   "middle1": "middle_01_r",
+   "middle2": "middle_02_r",
+   "middle3": "middle_03_r",
+   "ring1": "ring_01_r",
+   "ring2": "ring_02_r",
+   "ring3": "ring_03_r",
+   "pinky1": "pinky_01_r",
+   "pinky2": "pinky_02_r"
+  }
+ },
+ "axisOverrides": {
+  "left": {},
+  "right": {}
+ },
+ "calibration": {
+  "left": {
+   "version": 1,
+   "side": "left",
+   "frames": 45,
+   "jitterDeg": 2.249376,
+   "palmFacing": 1,
+   "warnings": [],
+   "createdAt": "2026-10-08T19:50:30.314Z",
+   "neutral": {
+    "fingers": {
+     "index": {
+      "flex1": 0.109528,
+      "spread": -0.003419,
+      "flex2": 0.158984,
+      "flex3": 0.106661
+     },
+     "middle": {
+      "flex1": 0.106731,
+      "spread": 0.001858,
+      "flex2": 0.175448,
+      "flex3": 0.081409
+     },
+     "ring": {
+      "flex1": 0.112466,
+      "spread": 0.000058,
+      "flex2": 0.151036,
+      "flex3": 0.112133
+     },
+     "pinky": {
+      "flex1": 0.108955,
+      "spread": -0.002762,
+      "flex2": 0.160349,
+      "flex3": 0.109116
+     }
+    },
+    "thumbRestDir": [
+     -0.277997,
+     0.835519,
+     0.473946
+    ],
+    "n2": [
+     0.037936,
+     0,
+     0.040028,
+     0.998478
+    ],
+    "n3": [
+     0.068774,
+     0,
+     0.054754,
+     0.996129
+    ]
+   },
+   "wrist": [
+    -0.00026,
+    0.000246,
+    0.00027,
+    1
+   ],
+   "rootRef": [
+    0.127223,
+    0.019244,
+    -0.55002
+   ],
+   "palmLength": 0.093271,
+   "units": {
+    "angles": "radians",
+    "lengths": "metres",
+    "quaternions": "xyzw"
+   }
+  },
+  "right": {
+   "version": 1,
+   "side": "right",
+   "frames": 43,
+   "jitterDeg": 2.454983,
+   "palmFacing": 0.999999,
+   "warnings": [],
+   "createdAt": "2026-10-08T19:50:30.318Z",
+   "neutral": {
+    "fingers": {
+     "index": {
+      "flex1": 0.100075,
+      "spread": 0.001106,
+      "flex2": 0.188468,
+      "flex3": 0.073193
+     },
+     "middle": {
+      "flex1": 0.099567,
+      "spread": -0.001489,
+      "flex2": 0.183235,
+      "flex3": 0.079807
+     },
+     "ring": {
+      "flex1": 0.105593,
+      "spread": -0.001962,
+      "flex2": 0.170756,
+      "flex3": 0.088951
+     },
+     "pinky": {
+      "flex1": 0.106987,
+      "spread": -0.003504,
+      "flex2": 0.166318,
+      "flex3": 0.098786
+     }
+    },
+    "thumbRestDir": [
+     0.691212,
+     0.549153,
+     0.46974
+    ],
+    "n2": [
+     0.041769,
+     0,
+     0.034693,
+     0.998525
+    ],
+    "n3": [
+     0.065257,
+     0,
+     0.054333,
+     0.996388
+    ]
+   },
+   "wrist": [
+    -0.000111,
+    -0.00065,
+    0.000643,
+    1
+   ],
+   "rootRef": [
+    -0.127177,
+    0.019243,
+    -0.549934
+   ],
+   "palmLength": 0.092846,
+   "units": {
+    "angles": "radians",
+    "lengths": "metres",
+    "quaternions": "xyzw"
+   }
+  }
+ },
+ "settings": {
+  "wristMode": "relative",
+  "rootPolicy": "fixed",
+  "labelConvention": "reported",
+  "positionScale": "auto"
+ },
+ "conventions": {
+  "units": "metres",
+  "world": "right-handed, +Y up, +X image-right (performer left), +Z performer->camera; from MediaPipe (x,-y,-z)",
+  "handFrame": "+Y distal (wrist->middle knuckles), +Z palmar, +X = Y x Z (thumb side on right hands, little-finger side on left hands)",
+  "boneFrame": "+Y along bone toward child, +Z palm normal orthogonalised to bone, +X = Y x Z; +X rotation = flexion",
+  "quaternionOrder": "xyzw",
+  "wrist": "absolute hand-frame orientation in canonical world",
+  "joints": "rest-relative local rotations in each bone canonical frame; identity = calibrated neutral open hand; composed parent->child",
+  "root": "approximate camera-space position estimate (metres) used only with rootPolicy approx-screen; not an accurate trajectory",
+  "jointParents": {
+   "wrist": null,
+   "thumb1": "wrist",
+   "thumb2": "thumb1",
+   "thumb3": "thumb2",
+   "index1": "wrist",
+   "index2": "index1",
+   "index3": "index2",
+   "middle1": "wrist",
+   "middle2": "middle1",
+   "middle3": "middle2",
+   "ring1": "wrist",
+   "ring2": "ring1",
+   "ring3": "ring2",
+   "pinky1": "wrist",
+   "pinky2": "pinky1",
+   "pinky3": "pinky2"
+  },
+  "jointLandmarks": {
+   "wrist": [
+    0,
+    9
+   ],
+   "thumb1": [
+    1,
+    2
+   ],
+   "thumb2": [
+    2,
+    3
+   ],
+   "thumb3": [
+    3,
+    4
+   ],
+   "index1": [
+    5,
+    6
+   ],
+   "index2": [
+    6,
+    7
+   ],
+   "index3": [
+    7,
+    8
+   ],
+   "middle1": [
+    9,
+    10
+   ],
+   "middle2": [
+    10,
+    11
+   ],
+   "middle3": [
+    11,
+    12
+   ],
+   "ring1": [
+    13,
+    14
+   ],
+   "ring2": [
+    14,
+    15
+   ],
+   "ring3": [
+    15,
+    16
+   ],
+   "pinky1": [
+    17,
+    18
+   ],
+   "pinky2": [
+    18,
+    19
+   ],
+   "pinky3": [
+    19,
+    20
+   ]
+  },
+  "handedness": "anatomical handedness of the performer; independent of preview mirroring",
+  "axisOverrides": "per-bone extra rotation (Euler XYZ degrees) applied to the inferred canonical bone frame"
+ },
+ "note": "Example profile for examples/rig-c-unreal-style.glb. Calibration was computed from a synthetic neutral pose; recalibrate with your own hands for real use."
+}
