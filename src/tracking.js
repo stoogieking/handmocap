@@ -123,7 +123,14 @@ export class Tracker {
     this.stop();
     const video = { width: { ideal: 1280 }, height: { ideal: 720 }, frameRate: { ideal: 30 } };
     if (deviceId) video.deviceId = { exact: deviceId };
-    this.stream = await navigator.mediaDevices.getUserMedia({ video, audio: false });
+    try {
+      this.stream = await navigator.mediaDevices.getUserMedia({ video, audio: false });
+    } catch (err) {
+      // Some Windows camera drivers refuse the preferred resolution/frame rate and report the
+      // camera as busy (NotReadableError). Retry once with no constraints before giving up.
+      if (err?.name !== 'NotReadableError' && err?.name !== 'OverconstrainedError' && err?.name !== 'AbortError') throw err;
+      this.stream = await navigator.mediaDevices.getUserMedia({ video: deviceId ? { deviceId: { exact: deviceId } } : true, audio: false });
+    }
     this.video.srcObject = this.stream;
     this.video.muted = true;
     this.video.playsInline = true;
@@ -316,7 +323,7 @@ export function cameraErrorMessage(err) {
       return 'No camera found (or the selected camera is unavailable).';
     case 'NotReadableError':
     case 'AbortError':
-      return 'The camera is in use by another application or could not be started.';
+      return 'Windows reports the camera as busy or blocked. Close other apps and browser tabs that may use it (Teams, Zoom, Discord, OBS, the Camera app), check Settings > Privacy & security > Camera allows desktop apps and your browser, check any privacy shutter or camera key on the laptop, then reload this page.';
     case 'NoMediaDevices':
       return err.message;
     case 'NotSupportedError':
