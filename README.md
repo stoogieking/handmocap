@@ -13,6 +13,9 @@ HandMocap watches your hands through a webcam, works out how every finger joint 
 
 No gloves, no special camera, no account, no installation. Video is processed on your own computer and is never uploaded.
 
+
+![HandMoCap Demo](docs/images/ezgif-86462a351d87b116.gif)
+
 ---
 
 ## Contents
