@@ -7,14 +7,12 @@
 ![Runs locally](https://img.shields.io/badge/video-stays_on_your_device-brightgreen)
 ![Status](https://img.shields.io/badge/status-beta-orange)
 
-![HandMocap: two 3D hands driven by a recording, with the settings panel on the right](docs/images/app.png)
+![HandMoCap Demo](docs/images/ezgif-86462a351d87b116.gif)
 
 HandMocap watches your hands through a webcam, works out how every finger joint and the wrist are rotating, and puts that motion onto a 3D character's hands. You can record a take and export it as a `.glb` animation that opens in Blender, Godot, Unity, Unreal and three.js.
 
 No gloves, no special camera, no account, no installation. Video is processed on your own computer and is never uploaded.
 
-
-![HandMoCap Demo](docs/images/ezgif-86462a351d87b116.gif)
 
 ---
 
