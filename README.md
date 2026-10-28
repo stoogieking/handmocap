@@ -201,4 +201,4 @@ Released under the [Apache License 2.0](LICENSE).
 
 Built on [MediaPipe](https://github.com/google-ai-edge/mediapipe) (Apache 2.0) by Google and [three.js](https://threejs.org) (MIT). HandMocap is an independent project, not affiliated with or endorsed by Google.
 
-Created by Kostis Spyroglou, developed with the help of Claude.
+Mashed together (Created) by Kostis Spyroglou, made sense of (Developed) with Claude Code.
